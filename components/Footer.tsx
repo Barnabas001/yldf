@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 const footerLinks = {
   "Quick Links": ["Home", "About Us", "Trainings", "Alumni", "Gallery"],
@@ -137,11 +138,15 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-6">
-              <div
-                className="w-12 h-12 bg-[#C99A2E] rounded-full flex items-center justify-center font-bold text-white text-sm"
-                style={{ fontFamily: "var(--font-dm-mono)" }}
-              >
-                YDLF
+              <div>
+                <Image
+                  src="/images/yldfLogo.jpg"
+                  alt="YDLF Logo"
+                  width={55}
+                  height={55}
+                  className="rounded-full object-cover"
+                  priority
+                />
               </div>
               <div>
                 <div
