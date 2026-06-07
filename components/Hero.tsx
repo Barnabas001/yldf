@@ -7,6 +7,8 @@ export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Only apply parallax on non-touch devices
+    if (window.matchMedia("(hover: none)").matches) return;
     const el = heroRef.current;
     if (!el) return;
     const handleMouseMove = (e: MouseEvent) => {
@@ -14,9 +16,8 @@ export default function Hero() {
       const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20;
       const y = ((e.clientY - rect.top) / rect.height - 0.5) * 20;
       const bg = el.querySelector(".hero-bg") as HTMLElement;
-      if (bg) {
+      if (bg)
         bg.style.transform = `translate(${x * 0.4}px, ${y * 0.4}px) scale(1.05)`;
-      }
     };
     el.addEventListener("mousemove", handleMouseMove);
     return () => el.removeEventListener("mousemove", handleMouseMove);
@@ -26,111 +27,96 @@ export default function Hero() {
     <section
       id="home"
       ref={heroRef}
-      className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ background: "var(--navy-dark)" }}
+      className="relative min-h-screen flex items-center"
+      style={{ background: "var(--navy-dark)", overflow: "hidden" }}
     >
-      {/* Background image with parallax */}
+      {/* Background image */}
       <div
         className="hero-bg absolute inset-0 transition-transform duration-700 ease-out"
         style={{
           backgroundImage: `url("/images/general.webp")`,
           backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundPosition: "center top",
           filter: "brightness(0.8)",
+          width: "100%",
+          height: "100%",
         }}
       />
 
-      {/* Gradient overlays */}
+      {/* Gradient overlay — stronger on mobile so text pops */}
       <div
         className="absolute inset-0"
         style={{
-          background: `linear-gradient(105deg, rgba(8,15,34,0.97) 0%, rgba(13,27,62,0.85) 50%, rgba(13,27,62,0.5) 100%)`,
+          background: `linear-gradient(105deg, rgba(8,15,34,0.97) 0%, rgba(13,27,62,0.90) 60%, rgba(13,27,62,0.70) 100%)`,
         }}
       />
 
-      {/* Gold geometric accent */}
+      {/* Gold accent glow */}
       <div
-        className="absolute top-0 right-0 w-1/3 h-full opacity-10"
+        className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none"
         style={{
-          background: `radial-gradient(ellipse at top right, var(--gold) 0%, transparent 70%)`,
+          background: `radial-gradient(ellipse at top right, var(--gold) 0%, transparent 65%)`,
         }}
       />
 
-      {/* Diagonal gold line */}
+      {/* Bottom gold line */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-1"
+        className="absolute bottom-0 left-0 right-0 h-px"
         style={{
           background: "linear-gradient(90deg, var(--gold), transparent)",
         }}
       />
 
-      {/* Floating elements */}
-      <div
-        className="absolute top-32 right-16 w-64 h-64 rounded-full opacity-5 hidden xl:block"
-        style={{
-          border: "2px solid var(--gold)",
-          animation: "spin 30s linear infinite",
-        }}
-      />
-      <div
-        className="absolute bottom-32 right-32 w-32 h-32 rounded-full opacity-5 hidden xl:block"
-        style={{
-          border: "1px solid var(--gold)",
-          animation: "spin 20s linear infinite reverse",
-        }}
-      />
-
-      {/* Year badge */}
-      <div className="absolute top-28 right-8 md:right-16 text-right hidden md:block">
-        <div
-          className="text-8xl font-bold opacity-5 text-white leading-none"
-          style={{ fontFamily: "var(--font-playfair)" }}
-        >
-          2003
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-28 pb-20 grid lg:grid-cols-2 gap-12 items-center">
-        <div>
-          {/* Label */}
+      {/* Content — full width on mobile, two-col on desktop */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-28 pb-16 lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
+        {/* LEFT: Text */}
+        <div className="w-full">
+          {/* Eyebrow */}
           <div
-            className="section-label mb-8 animate-fade-in"
-            style={{ animationDelay: "0.1s" }}
+            className="flex items-center gap-3 mb-7"
+            style={{
+              fontFamily: "var(--font-dm-mono)",
+              fontSize: "0.65rem",
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color: "var(--gold)",
+            }}
           >
+            <span
+              style={{
+                width: 28,
+                height: 1,
+                background: "var(--gold)",
+                display: "inline-block",
+                flexShrink: 0,
+              }}
+            />
             For Excellence &amp; All Round Development
           </div>
 
           {/* Headline */}
           <h1
-            className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] mb-6"
-            style={{ fontFamily: "var(--font-playfair)" }}
+            className="font-bold leading-[1.05] mb-6"
+            style={{
+              fontFamily: "var(--font-playfair)",
+              fontSize: "clamp(2.6rem, 6vw, 4.5rem)",
+              color: "white",
+            }}
           >
-            <span
-              className="text-white block animate-fade-up"
-              style={{ animationDelay: "0.2s" }}
-            >
-              Empowering
-            </span>
-            <span
-              className="text-white block animate-fade-up"
-              style={{ animationDelay: "0.3s" }}
-            >
-              Young
-            </span>
-            <span
-              className="block animate-fade-up gradient-text"
-              style={{ animationDelay: "0.4s" }}
-            >
-              Leaders.
-            </span>
+            Empowering
+            <br />
+            Young
+            <br />
+            <span style={{ color: "var(--gold)" }}>Leaders.</span>
           </h1>
 
           <p
-            className="text-white/60 text-lg leading-relaxed mb-10 max-w-lg animate-fade-up"
+            className="leading-relaxed mb-8"
             style={{
-              animationDelay: "0.5s",
               fontFamily: "var(--font-dm-sans)",
+              fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
+              color: "rgba(255,255,255,0.6)",
+              maxWidth: "480px",
             }}
           >
             YDLF is committed to raising a new generation of transformational
@@ -138,12 +124,17 @@ export default function Hero() {
             2003.
           </p>
 
-          {/* Buttons */}
-          <div
-            className="flex flex-wrap gap-4 animate-fade-up"
-            style={{ animationDelay: "0.6s" }}
-          >
-            <a href="#trainings" className="btn-gold">
+          {/* Buttons — full-width on mobile */}
+          <div className="flex flex-col sm:flex-row gap-3 mb-12">
+            <a
+              href="#trainings"
+              className="btn-gold justify-center sm:justify-start"
+              style={{
+                width: "100%",
+                maxWidth: "280px",
+                fontFamily: "var(--font-dm-sans)",
+              }}
+            >
               <span>Register for Training</span>
               <svg
                 width="16"
@@ -156,7 +147,15 @@ export default function Hero() {
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </a>
-            <a href="#about" className="btn-white">
+            <a
+              href="#about"
+              className="btn-white justify-center sm:justify-start"
+              style={{
+                width: "100%",
+                maxWidth: "280px",
+                fontFamily: "var(--font-dm-sans)",
+              }}
+            >
               <span>Learn More</span>
               <svg
                 width="16"
@@ -172,10 +171,10 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* Quick stats inline */}
+          {/* Stats row */}
           <div
-            className="flex flex-wrap gap-8 mt-14 pt-10 border-t border-white/10 animate-fade-up"
-            style={{ animationDelay: "0.7s" }}
+            className="flex flex-wrap gap-6 pt-8"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}
           >
             {[
               { value: "500+", label: "Leaders Trained" },
@@ -184,14 +183,28 @@ export default function Hero() {
             ].map((stat) => (
               <div key={stat.label}>
                 <div
-                  className="text-3xl font-bold gradient-text"
-                  style={{ fontFamily: "var(--font-playfair)" }}
+                  style={{
+                    fontFamily: "var(--font-playfair)",
+                    fontSize: "clamp(1.6rem, 4vw, 2rem)",
+                    fontWeight: 900,
+                    background:
+                      "linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
                 >
                   {stat.value}
                 </div>
                 <div
-                  className="text-white/50 text-xs tracking-widest uppercase mt-1"
-                  style={{ fontFamily: "var(--font-dm-mono)" }}
+                  style={{
+                    fontFamily: "var(--font-dm-mono)",
+                    fontSize: "0.6rem",
+                    color: "rgba(255,255,255,0.4)",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.15em",
+                    marginTop: 4,
+                  }}
                 >
                   {stat.label}
                 </div>
@@ -200,9 +213,8 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right: Image collage */}
+        {/* RIGHT: Image collage — desktop only */}
         <div className="hidden lg:flex items-center justify-center relative h-[520px]">
-          {/* Main image */}
           <div
             className="absolute right-0 top-8 w-72 h-96 overflow-hidden shadow-2xl"
             style={{
@@ -225,12 +237,10 @@ export default function Hero() {
             />
           </div>
 
-          {/* Secondary image */}
           <div
             className="absolute left-0 bottom-8 w-52 h-64 overflow-hidden shadow-xl"
             style={{
               clipPath: "polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 15%)",
-              animation: "fadeIn 1s ease 1s both",
             }}
           >
             <Image
@@ -239,7 +249,6 @@ export default function Hero() {
               fill
               className="object-cover"
             />
-
             <div
               className="absolute inset-0 opacity-30"
               style={{
@@ -249,11 +258,7 @@ export default function Hero() {
             />
           </div>
 
-          {/* Gold accent card */}
-          <div
-            className="absolute right-4 bottom-4 bg-[#C99A2E] px-6 py-4 shadow-lg z-10"
-            style={{ animation: "fadeIn 1s ease 1.2s both" }}
-          >
+          <div className="absolute right-4 bottom-4 bg-[#C99A2E] px-6 py-4 shadow-lg z-10">
             <div
               className="text-white text-2xl font-bold"
               style={{ fontFamily: "var(--font-playfair)" }}
@@ -265,11 +270,7 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Global badge */}
-          <div
-            className="absolute left-16 top-4 bg-[#0D1B3E] border border-[#C99A2E]/30 px-4 py-3 shadow-lg z-10"
-            style={{ animation: "fadeIn 1s ease 1.4s both" }}
-          >
+          <div className="absolute left-16 top-4 bg-[#0D1B3E] border border-[#C99A2E]/30 px-4 py-3 shadow-lg z-10">
             <div className="flex items-center gap-2">
               <svg
                 width="20"
@@ -294,63 +295,26 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+      {/* Scroll indicator — hidden on small phones */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 opacity-40">
         <div
-          className="text-white/60 text-xs tracking-widest uppercase"
-          style={{ fontFamily: "var(--font-dm-mono)" }}
+          style={{
+            fontFamily: "var(--font-dm-mono)",
+            fontSize: "0.6rem",
+            color: "rgba(255,255,255,0.6)",
+            textTransform: "uppercase",
+            letterSpacing: "0.2em",
+          }}
         >
           Scroll
         </div>
         <div
-          className="w-px h-12 bg-gradient-to-b from-[#C99A2E] to-transparent"
-          style={{ animation: "pulse 2s ease-in-out infinite" }}
+          className="w-px h-10"
+          style={{
+            background: "linear-gradient(to bottom, var(--gold), transparent)",
+          }}
         />
       </div>
-
-      <style jsx>{`
-        @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-        @keyframes pulse {
-          0%,
-          100% {
-            opacity: 0.5;
-          }
-          50% {
-            opacity: 1;
-          }
-        }
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-        @keyframes fadeUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in {
-          animation: fadeIn 0.8s ease both;
-        }
-        .animate-fade-up {
-          animation: fadeUp 0.7s ease both;
-        }
-      `}</style>
     </section>
   );
 }
