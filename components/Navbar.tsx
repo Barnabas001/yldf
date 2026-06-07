@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
+import Logo from "../images/yldfLogo.jpg";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -35,14 +37,24 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          {/* Logo */}
-          <a href="#home" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-[#C99A2E] rounded-full flex items-center justify-center font-bold text-white text-sm font-mono tracking-tight">
-              YDLF
-            </div>
-            <div className="hidden sm:block">
+
+          {/* Logo Section */}
+          <a
+            href="#home"
+            className="flex items-center gap-3"
+          >
+            <Image
+              src={Logo}
+              alt="YDLF Logo"
+              width={55}
+              height={55}
+              className="rounded-full object-cover"
+              priority
+            />
+
+            <div>
               <div
-                className="text-white font-display font-bold leading-tight"
+                className="text-white font-bold leading-tight"
                 style={{
                   fontFamily: "var(--font-playfair)",
                   fontSize: "0.95rem",
@@ -50,8 +62,9 @@ export default function Navbar() {
               >
                 Youth Development
               </div>
+
               <div
-                className="text-[#C99A2E] font-display font-semibold leading-tight"
+                className="text-[#C99A2E] font-semibold leading-tight"
                 style={{
                   fontFamily: "var(--font-playfair)",
                   fontSize: "0.95rem",
@@ -69,7 +82,7 @@ export default function Navbar() {
                 key={link.label}
                 href={link.href}
                 onClick={() => setActiveLink(link.label)}
-                className={`nav-link text-sm font-medium tracking-wide transition-colors ${
+                className={`text-sm font-medium tracking-wide transition-colors ${
                   activeLink === link.label
                     ? "text-[#C99A2E]"
                     : "text-white/80 hover:text-white"
@@ -81,10 +94,14 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* CTA */}
-          <div className="hidden lg:flex items-center gap-3">
-            <a href="#trainings" className="btn-gold text-sm">
+          {/* Desktop CTA */}
+          <div className="hidden lg:flex items-center">
+            <a
+              href="#trainings"
+              className="btn-gold text-sm flex items-center gap-2"
+            >
               <span>Register for Training</span>
+
               <svg
                 width="14"
                 height="14"
@@ -98,11 +115,11 @@ export default function Navbar() {
             </a>
           </div>
 
-          {/* Mobile toggle */}
+          {/* Mobile Menu Toggle */}
           <button
             className="lg:hidden text-white p-2"
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
+            aria-label="Toggle Menu"
           >
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -110,12 +127,15 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         <div
-          className={`lg:hidden overflow-hidden transition-all duration-400 ${
-            mobileOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+          className={`lg:hidden overflow-hidden transition-all duration-500 ${
+            mobileOpen
+              ? "max-h-[500px] opacity-100"
+              : "max-h-0 opacity-0"
           }`}
           style={{ background: "#0D1B3E" }}
         >
-          <div className="px-6 py-4 space-y-1 border-t border-white/10">
+          <div className="px-6 py-4 border-t border-white/10">
+
             {navLinks.map((link) => (
               <a
                 key={link.label}
@@ -124,15 +144,18 @@ export default function Navbar() {
                   setActiveLink(link.label);
                   setMobileOpen(false);
                 }}
-                className="block py-3 text-white/80 hover:text-[#C99A2E] text-sm font-medium border-b border-white/5 transition-colors"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+                className="block py-3 text-white/80 hover:text-[#C99A2E] border-b border-white/5 transition-colors"
               >
                 {link.label}
               </a>
             ))}
+
             <div className="pt-4">
-              <a href="#trainings" className="btn-gold w-full justify-center">
-                <span>Register for Training</span>
+              <a
+                href="#trainings"
+                className="btn-gold w-full flex justify-center"
+              >
+                Register for Training
               </a>
             </div>
           </div>
