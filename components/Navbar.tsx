@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import Logo from "../images/yldfLogo.jpg";
+
+// import Logo from "../images/yldfLogo.jpg";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -37,14 +38,10 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-
           {/* Logo Section */}
-          <a
-            href="#home"
-            className="flex items-center gap-3"
-          >
+          <a href="#home" className="flex items-center gap-3">
             <Image
-              src={Logo}
+              src="/images/yldfLogo.jpg"
               alt="YDLF Logo"
               width={55}
               height={55}
@@ -128,14 +125,11 @@ export default function Navbar() {
         {/* Mobile Menu */}
         <div
           className={`lg:hidden overflow-hidden transition-all duration-500 ${
-            mobileOpen
-              ? "max-h-[500px] opacity-100"
-              : "max-h-0 opacity-0"
+            mobileOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
           }`}
           style={{ background: "#0D1B3E" }}
         >
           <div className="px-6 py-4 border-t border-white/10">
-
             {navLinks.map((link) => (
               <a
                 key={link.label}
